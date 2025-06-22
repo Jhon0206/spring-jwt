@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class TokenService{
   private final TokenRepository repository;
 
-  private List<Token> getValidTokensbyUser(Integer id){
+  public List<Token> getValidTokensbyUser(Integer id){
     return repository.validTokensfindByUser(id).orElse(new ArrayList<Token>());
   }
 }
