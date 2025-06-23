@@ -29,17 +29,14 @@ public class Token {
   private Long id;
   @Column(nullable = false)
   private String token;
-  @Column(name = "refresh_token", nullable = false)
-  private String refreshToken;
-  @Enumerated(EnumType.STRING)
+  @Column(name = "access_type", nullable = false)
   @Builder.Default
-  private TokenType type = TokenType.BEARER;
-  @Column(nullable = false)
-  private Boolean isEnabled;
-  @Column(nullable = false)
-  private Boolean isExpired;
+  private String accessType = "BEARER";
+  @Enumerated(EnumType.STRING)
+  private TokenType type;
   @Column(name = "date_creation", nullable = false)
-  private LocalDateTime creationDate;  
+  @Builder.Default
+  private LocalDateTime creationDate = LocalDateTime.now();  
   @Column(name = "date_expiration", nullable = false)
   private LocalDateTime expirationDate;
   @ManyToOne
@@ -48,6 +45,6 @@ public class Token {
   private User user;
 
   public enum TokenType {
-    BEARER
+    TOKEN, REFRESH_TOKEN
   }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InfoController {
 
   @GetMapping()
-  public String getMethodName() {
+  public String getInformation() {
       return "Spring Boot App with JWT";
   }
   

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
+  private final TokenService tokenService;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
@@ -26,7 +27,7 @@ public class AuthService {
 
   public RegisterResponse register(RegisterRequest request) {
     if (userRepository.findByEmail(request.email()).isPresent()) {
-      return new RegisterResponse(request.email(),"WARNING","User already registered.");
+      return new RegisterResponse(request.email(), "WARNING", "User already registered.");
     }
     var user = User.builder()
         .name(request.name())
@@ -35,8 +36,8 @@ public class AuthService {
         .pass(passwordEncoder.encode(request.password()))
         .role(RolesEnum.USER)
         .build();
-        userRepository.save(user).getEmail();
-      return new RegisterResponse(request.email(),"INFORMATION","New user registered.");
+    userRepository.save(user).getEmail();
+    return new RegisterResponse(request.email(), "INFORMATION", "New user registered.");
   }
 
   public AuthResponse authenticate(AuthRequest request) {
@@ -45,6 +46,7 @@ public class AuthService {
     var user = userRepository.findByEmail(request.email()).orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
+    tokenService.saveTokens(user,jwtToken,refreshToken);
     return new AuthResponse(jwtToken, refreshToken);
   }
 
