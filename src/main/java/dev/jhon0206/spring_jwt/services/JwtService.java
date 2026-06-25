@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import dev.jhon0206.spring_jwt.config.JwtConfig;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 
@@ -67,11 +69,17 @@ public class JwtService {
   }
 
   private Claims extractAllClaims(String token) {
-    return Jwts
-        .parser()
-        .verifyWith(secretKey)
-        .build()
-        .parseSignedClaims(token)
-        .getPayload();
+    try {
+      return Jwts
+          .parser()
+          .verifyWith(secretKey)
+          .build()
+          .parseSignedClaims(token)
+          .getPayload();
+    } catch (ExpiredJwtException e) {
+      throw new JwtException("Token has expired", e);
+    } catch (JwtException | IllegalArgumentException e) {
+      throw new JwtException("Token not valid", e);
+    }
   }
 }
