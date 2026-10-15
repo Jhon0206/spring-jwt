@@ -1,4 +1,4 @@
-package dev.jhon0206.spring_jwt.util;
+package dev.jhon0206.spring_jwt.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package dev.jhon0206.spring_jwt.api;
+package dev.jhon0206.spring_jwt.auth;
 
 import java.util.Map;
 
@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.jhon0206.spring_jwt.services.AuthService;
-import dev.jhon0206.spring_jwt.util.AuthRequest;
-import dev.jhon0206.spring_jwt.util.AuthResponse;
+import dev.jhon0206.spring_jwt.auth.dto.AuthRequest;
+import dev.jhon0206.spring_jwt.auth.dto.AuthResponse;
 import dev.jhon0206.spring_jwt.util.RefreshTokenRequest;
 import dev.jhon0206.spring_jwt.util.RegisterRequest;
 import dev.jhon0206.spring_jwt.util.RegisterResponse;

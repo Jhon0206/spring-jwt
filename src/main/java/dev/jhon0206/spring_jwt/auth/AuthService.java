@@ -1,9 +1,11 @@
-package dev.jhon0206.spring_jwt.services;
+package dev.jhon0206.spring_jwt.auth;
 
+import dev.jhon0206.spring_jwt.auth.dto.AuthRequest;
+import dev.jhon0206.spring_jwt.auth.dto.AuthResponse;
 import dev.jhon0206.spring_jwt.entities.User;
 import dev.jhon0206.spring_jwt.repositories.UserRepository;
-import dev.jhon0206.spring_jwt.util.AuthRequest;
-import dev.jhon0206.spring_jwt.util.AuthResponse;
+import dev.jhon0206.spring_jwt.services.JwtService;
+import dev.jhon0206.spring_jwt.services.TokenService;
 import dev.jhon0206.spring_jwt.util.RefreshTokenRequest;
 import dev.jhon0206.spring_jwt.util.RegisterRequest;
 import dev.jhon0206.spring_jwt.util.RegisterResponse;
@@ -16,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
 public class AuthService {
 
   private final TokenService tokenService;
@@ -42,8 +44,8 @@ public class AuthService {
 
   public AuthResponse authenticate(AuthRequest request) {
     authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.email(), request.password()));
-    var user = userRepository.findByEmail(request.email()).orElseThrow();
+        new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+    var user = userRepository.findByEmail(request.username()).orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     tokenService.saveTokens(user,jwtToken,refreshToken);
