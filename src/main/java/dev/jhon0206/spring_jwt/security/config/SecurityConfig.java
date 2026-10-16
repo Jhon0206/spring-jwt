@@ -1,4 +1,4 @@
-package dev.jhon0206.spring_jwt.config;
+package dev.jhon0206.spring_jwt.security.config;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import dev.jhon0206.spring_jwt.components.JwtAuthFilter;
+import dev.jhon0206.spring_jwt.security.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -57,7 +57,7 @@ public class SecurityConfig {
   UrlBasedCorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:3000","http://localhost:4200","http://localhost:5173"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

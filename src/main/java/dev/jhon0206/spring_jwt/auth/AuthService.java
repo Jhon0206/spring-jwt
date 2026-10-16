@@ -4,7 +4,7 @@ import dev.jhon0206.spring_jwt.auth.dto.AuthRequest;
 import dev.jhon0206.spring_jwt.auth.dto.AuthResponse;
 import dev.jhon0206.spring_jwt.entities.User;
 import dev.jhon0206.spring_jwt.repositories.UserRepository;
-import dev.jhon0206.spring_jwt.services.JwtService;
+import dev.jhon0206.spring_jwt.security.service.JwtService;
 import dev.jhon0206.spring_jwt.services.TokenService;
 import dev.jhon0206.spring_jwt.util.RefreshTokenRequest;
 import dev.jhon0206.spring_jwt.util.RegisterRequest;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class AuthService {
 
   private final TokenService tokenService;
@@ -44,11 +44,11 @@ public class AuthService {
 
   public AuthResponse authenticate(AuthRequest request) {
     authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-    var user = userRepository.findByEmail(request.username()).orElseThrow();
-    var jwtToken = jwtService.generateToken(user);
+        new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+    var user = userRepository.findByEmail(request.email()).orElseThrow();
+    var jwtToken = jwtService.generateAccessToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
-    tokenService.saveTokens(user,jwtToken,refreshToken);
+    tokenService.saveTokens(user, jwtToken, refreshToken);
     return new AuthResponse(jwtToken, refreshToken);
   }
 
@@ -57,7 +57,7 @@ public class AuthService {
     if (userEmail != null) {
       var user = userRepository.findByEmail(userEmail).orElseThrow();
       if (jwtService.isTokenValid(request.refreshToken(), user)) {
-        var accessToken = jwtService.generateToken(user);
+        var accessToken = jwtService.generateAccessToken(user);
         return new AuthResponse(accessToken, request.refreshToken());
       }
     }

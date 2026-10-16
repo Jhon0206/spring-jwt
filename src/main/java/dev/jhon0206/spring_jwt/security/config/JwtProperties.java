@@ -1,23 +1,15 @@
-package dev.jhon0206.spring_jwt.config;
+package dev.jhon0206.spring_jwt.security.config;
 
 import java.nio.charset.StandardCharsets;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import io.jsonwebtoken.security.Keys;
-import lombok.Data;
 
-@Data
-@Configuration
 @ConfigurationProperties(prefix = "application.jwt")
-public class JwtConfig {
-  private String secretKey;
-  private Integer tokenExpirationAfterDays;
-  private Integer refreshTokenExpirationAfterDays;
+public record JwtProperties(String secretKey, String tokenPrefix,
+    Integer tokenExpirationAfterDays, Integer refreshTokenExpirationAfterDays) {
 
   public long getTokenExpirationInMillis() {
     return tokenExpirationAfterDays * 24L * 60 * 60 * 1000;
@@ -27,9 +19,7 @@ public class JwtConfig {
     return refreshTokenExpirationAfterDays * 24L * 60 * 60 * 1000;
   }
 
-  @Bean
-  SecretKey secretKey() {
+  public SecretKey getSigningKey() {
     return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
   }
-
 }
