@@ -1,5 +1,6 @@
 package dev.jhon0206.springjwt.exception;
 
+import java.text.MessageFormat;
 
 public class UserNotFoundException extends RuntimeException {
 
@@ -7,8 +8,8 @@ public class UserNotFoundException extends RuntimeException {
     super("User not found");
   }
 
-  public UserNotFoundException(String message) {
-    super(message);
+  public UserNotFoundException(String email) {
+    super(MessageFormat.format("User with email {0} not found", email));
   }
 
 }

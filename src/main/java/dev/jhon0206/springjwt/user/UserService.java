@@ -4,9 +4,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.jhon0206.springjwt.exception.UserAlreadyExistsException;
+import dev.jhon0206.springjwt.exception.UserNotFoundException;
 import dev.jhon0206.springjwt.user.dto.ChangePasswordRequest;
 import dev.jhon0206.springjwt.user.dto.RegisterUserRequest;
 import dev.jhon0206.springjwt.user.dto.RegisterUserResponse;
+import dev.jhon0206.springjwt.user.dto.UpdateProfileRequest;
 import dev.jhon0206.springjwt.user.dto.UserResponse;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +26,7 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserResponse getMyProfile(String email) {
-    User user = repository.findByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException("User not found with email: %S".formatted(email)));
-
+    User user = repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
     return new UserResponse(
         user.getId(),
         user.getName(),
@@ -37,8 +37,16 @@ public class UserService {
   }
 
   @Transactional
+  public void updateMyProfile(String email, UpdateProfileRequest request) {
+    var user = repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
+    user.setName(request.name());
+    user.setLastName(request.lastname());
+    repository.save(user);
+  }
+
+  @Transactional
   public void updateMyPassword(String email, ChangePasswordRequest request) {
-    var user = repository.findByEmail(email).orElseThrow();
+    var user = repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
     if (!passwordEncoder.matches(request.currentPassword(), user.getPass())) {
       throw new IllegalArgumentException("Old password does not match.");
     }
