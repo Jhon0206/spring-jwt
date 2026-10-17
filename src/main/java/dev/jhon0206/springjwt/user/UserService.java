@@ -61,7 +61,7 @@ public class UserService {
     }
     var user = User.builder()
         .name(request.name())
-        .lastName(request.lastname())
+        .lastName(request.lastName())
         .email(request.email())
         .pass(passwordEncoder.encode(request.password()))
         .role(RolesEnum.USER)

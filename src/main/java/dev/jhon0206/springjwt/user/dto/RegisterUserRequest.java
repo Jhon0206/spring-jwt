@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 public record RegisterUserRequest(
     @NotBlank String name,
-    @NotBlank @JsonProperty ("last_name") String lastname,
+    @NotBlank @JsonProperty ("last_name") String lastName,
     @NotBlank @Email String email,
     @NotBlank @Size(min = 8) String password) {
 }
