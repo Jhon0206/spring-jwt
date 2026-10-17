@@ -1,10 +1,8 @@
-package dev.jhon0206.springjwt.repositories;
+package dev.jhon0206.springjwt.user;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import dev.jhon0206.springjwt.entities.User;
 
 
 public interface UserRepository extends JpaRepository<User,Integer>{

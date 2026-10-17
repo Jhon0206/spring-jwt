@@ -19,13 +19,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import dev.jhon0206.springjwt.security.filter.JwtAuthFilter;
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
   private final JwtAuthFilter filter;
+
+  public SecurityConfig(JwtAuthFilter filter) {
+    this.filter = filter;
+  }
 
   @Bean
   AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -39,8 +41,8 @@ public class SecurityConfig {
         .cors(Customizer.withDefaults())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**", "/info/**").permitAll()
-            .requestMatchers("/demo/user/**").hasAnyAuthority("USER", "ADMIN")
-            .requestMatchers("/demo/admin/**").hasAuthority("ADMIN")
+            .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
+            .requestMatchers("/admins/**").hasAuthority("ADMIN")
             .anyRequest().authenticated())
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
@@ -56,7 +58,8 @@ public class SecurityConfig {
   @Bean
   UrlBasedCorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:3000","http://localhost:4200","http://localhost:5173"));
+    configuration
+        .setAllowedOrigins(Arrays.asList("http://127.0.0.1:3000", "http://localhost:4200", "http://localhost:5173"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true);

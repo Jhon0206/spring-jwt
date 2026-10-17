@@ -14,14 +14,16 @@ import dev.jhon0206.springjwt.auth.dto.AuthResponse;
 import dev.jhon0206.springjwt.util.RefreshTokenRequest;
 import dev.jhon0206.springjwt.util.RegisterRequest;
 import dev.jhon0206.springjwt.util.RegisterResponse;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("auth")
-@RequiredArgsConstructor
 public class AuthController {
 
   private final AuthService authService;
+
+  public AuthController(AuthService authService) {
+    this.authService = authService;
+  }
 
   @PostMapping("/register")
   public ResponseEntity<RegisterResponse> register(

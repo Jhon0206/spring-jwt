@@ -7,10 +7,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import dev.jhon0206.springjwt.entities.User;
-import dev.jhon0206.springjwt.repositories.UserRepository;
 import dev.jhon0206.springjwt.security.config.JwtProperties;
-import dev.jhon0206.springjwt.util.RolesEnum;
+import dev.jhon0206.springjwt.user.RolesEnum;
+import dev.jhon0206.springjwt.user.User;
+import dev.jhon0206.springjwt.user.UserRepository;
+import dev.jhon0206.springjwt.user.StatusEnum;
 
 @SpringBootApplication
 @EnableConfigurationProperties(JwtProperties.class)
@@ -33,6 +34,7 @@ public class SpringJwtApplication {
 						.email("admin@example.com")
 						.pass(passwordEncoder.encode("password"))
 						.role(RolesEnum.ADMIN)
+            .status(StatusEnum.APPROVED)
 						.build();
 				userRepository.save(user);
 			}

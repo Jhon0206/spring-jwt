@@ -12,12 +12,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
   private final JwtProperties jwtProperties;
+
+  public JwtService(JwtProperties jwtProperties) {
+    this.jwtProperties = jwtProperties;
+  }
 
   public String generateAccessToken(UserDetails userDetails) {
     return buildToken(Map.of("token_type", "ACCESS"), userDetails, jwtProperties.getTokenExpirationInMillis());

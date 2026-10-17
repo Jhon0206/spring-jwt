@@ -16,6 +16,13 @@ public class GlobalExceptionHandler {
     return problemDetail;
   }
 
+  @ExceptionHandler(UserAlreadyExistsException.class)
+  public ProblemDetail handleUserAlreadyExists(UserAlreadyExistsException ex) {
+    var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    problemDetail.setTitle("Registration Failed");
+    return problemDetail;
+  }
+
   @ExceptionHandler(Exception.class)
   public ProblemDetail handleGenericException(Exception ex) {
     return switch (ex) {
